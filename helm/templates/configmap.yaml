@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frig-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: fram
+    chart: {{ template "forgerock.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  {{- with .Values.frig.env }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}

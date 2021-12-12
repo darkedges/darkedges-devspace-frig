@@ -1,0 +1,17 @@
+{
+    "name": "hello",
+    "handler": {
+        "type": "StaticResponseHandler",
+        "config": {
+            "status": 200,
+            "reason": "OK",
+            "headers": {
+                "Content-Type": [
+                    "text/plain"
+                ]
+            },
+            "entity": "Hello world!!"
+        }
+    },
+    "condition": "${matches(request.uri.path, '^/hello')}"
+}

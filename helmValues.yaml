@@ -1,0 +1,7 @@
+image:
+  repository: image(frig)
+  tag: tag(frig)
+frig:
+  env:
+    IG_RUN_MODE: PRODUCTION
+    INSTANCE_DIR: /opt/frig/instance/data

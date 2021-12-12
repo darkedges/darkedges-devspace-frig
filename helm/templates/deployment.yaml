@@ -1,0 +1,43 @@
+ {{- if not .Values.isStatefulSet }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frig
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: frig
+    chart: {{ template "forgerock.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: frig
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: frig
+    spec:
+      containers:
+      - name: frig
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+        {{- if .Values.frig.env }}
+        envFrom:
+          - configMapRef:
+              name: frig-config
+        {{- end }}      
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+{{- end }}

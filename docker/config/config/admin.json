@@ -1,0 +1,8 @@
+{
+  "prefix": "openig",
+  "connectors": [
+    {
+      "port": 8080
+    }
+  ]
+}

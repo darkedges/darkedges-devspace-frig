@@ -1,0 +1,24 @@
+replicaCount: 1
+
+volumeClaimTemplates:
+  data:
+    storageClassName:
+    storageSize: 100Mi
+
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+image:
+  repository:  darkedges/frig
+  tag: 7.1.1-eval
+  imagePullPolicy: IfNotPresent
+
+isStatefulSet: false
+
+frig:
+  env:
+    IG_RUN_MODE: development

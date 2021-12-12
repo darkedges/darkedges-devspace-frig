@@ -1,0 +1,75 @@
+version: v1beta11
+
+images:
+  frig:
+    image: darkedges/frig
+    cmd:
+    - devspace
+    dockerfile: docker/Dockerfile
+    context: docker
+    injectRestartHelper: true  
+
+# `deployments` tells DevSpace how to deploy this project
+deployments:
+- name: devspace-frig
+  # This deployment uses `helm` but you can also define `kubectl` deployments or kustomizations
+  helm:
+    # We are deploying this project with the Helm chart you provided
+    chart:
+      name: helm
+    # Under `values` we can define the values for this Helm chart used during `helm install/upgrade`
+    # You may also use `valuesFiles` to load values from files, e.g. valuesFiles: ["values.yaml"]
+    valuesFiles:
+    - helmValues.yaml
+    displayOutput: true
+    upgradeArgs:
+    - --debug
+    recreate: true  
+
+# `dev` only applies when you run `devspace dev`
+dev:
+  # `dev.ports` specifies all ports that should be forwarded while `devspace dev` is running
+  # Port-forwarding lets you access your application via localhost on your local machine
+  ports:
+  - imageSelector: image(frig):tag(frig) # Select the Pod that runs our `${IMAGE}`
+    forward:
+    - port: 8080
+
+  ## `dev.open` tells DevSpace to open certain URLs as soon as they return HTTP status 200
+  ## Since we configured port-forwarding, we can use a localhost address here to access our application
+  # open:
+  # - url: http://localhost:8080
+
+  # `dev.sync` configures a file sync between our Pods in k8s and your local project files
+  sync:
+  - imageSelector: image(frig):tag(frig) # Select the Pod that runs our `${IMAGE}`
+    localSubPath: ./docker/config
+    containerPath: /opt/frig/instance/data 
+    excludePaths:
+    - .git/
+    - tmp/
+    - data/
+    - logs/
+
+  # `dev.autoreload` paths that are watched during devspace dev and any change to such a path will trigger a redeploy.  
+  autoReload:
+    paths:
+    - ./docker/config/admin.json
+    - ./docker/config/config.json
+    - ./docker/config/logbag.xml
+    images:
+    - frig
+    deployments:
+    - devspace-frig
+
+# `profiles` lets you modify the config above for different environments (e.g. dev vs production)
+profiles:
+  # This profile is called `production` and you can use it for example using: devspace deploy -p production
+  # We generally recommend to use the base config without any profiles as optimized for development (e.g. image build+push is disabled)
+- name: production
+# This profile adds our image to the config so that DevSpace will build, tag and push our image before the deployment
+  merge:
+    images:
+      app:
+        image: ${IMAGE} # Use the value of our `${IMAGE}` variable here (see vars above)
+        dockerfile: ./Dockerfile

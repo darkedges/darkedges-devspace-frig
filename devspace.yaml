@@ -43,7 +43,7 @@ dev:
   # `dev.sync` configures a file sync between our Pods in k8s and your local project files
   sync:
   - imageSelector: image(frig):tag(frig) # Select the Pod that runs our `${IMAGE}`
-    localSubPath: ./docker/config
+    localSubPath: ./docker/instance
     containerPath: /opt/frig/instance/data 
     excludePaths:
     - .git/
@@ -54,9 +54,9 @@ dev:
   # `dev.autoreload` paths that are watched during devspace dev and any change to such a path will trigger a redeploy.  
   autoReload:
     paths:
-    - ./docker/config/admin.json
-    - ./docker/config/config.json
-    - ./docker/config/logbag.xml
+    - ./docker/instance/config/admin.json
+    - ./docker/instance/config/config.json
+    - ./docker/instance/config/logbag.xml
     images:
     - frig
     deployments:

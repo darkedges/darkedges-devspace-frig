@@ -15,13 +15,13 @@ It uses
    git clone https://github.com:darkedges/darkedges-devspace-frig
    ```
 
-1. Install
+2. Install
 
    - [Helm](https://helm.sh/docs/intro/install/)
    - [Docker](https://docs.docker.com/get-docker/)
    - [DevSpace](https://devspace.sh/cli/docs/getting-started/installation)
 
-2. Download [IG-7.1.1.zip](https://backstage.forgerock.com/downloads/get/familyId:ig/productId:ig/minorVersion:7.1/version:7.1.1/releaseType:full/distribution:zip) to `docker/IG-7.1.1.zip`
+3. Download [IG-7.1.1.zip](https://backstage.forgerock.com/downloads/get/familyId:ig/productId:ig/minorVersion:7.1/version:7.1.1/releaseType:full/distribution:zip) to `docker/IG-7.1.1.zip`
 
 ## Develop
 
